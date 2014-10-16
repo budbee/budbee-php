@@ -27,6 +27,8 @@ class Contact
         'telephoneNumber' => 'string',
         'email' => 'string',
         'address' => '\Budbee\Model\Address',
+        'doorCode' => 'string',
+        'outsideDoor' => 'bool',
         'additionalInfo' => 'string'
     );
 
@@ -56,6 +58,16 @@ class Contact
     * @var \Budbee\Model\Address
      */
     public $address;
+
+    /**
+     * @var string
+     */
+    public $doorCode;
+
+    /**
+     * @var bool
+     */
+    public $outsideDoor;
 
     /**
     * Additional information about the customer, e.g. door code, can leave shipment outside door etc.

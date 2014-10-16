@@ -23,6 +23,7 @@ class Address
 {
     static $dataTypes = array(
         'street' => 'string',
+        'street2' => 'string',
         'postalCode' => 'string',
         'city' => 'string',
         'country' => 'string'
@@ -32,6 +33,11 @@ class Address
     * @var string
      */
     public $street;
+
+    /**
+     * @var string
+     */
+    public $street2;
 
     /**
     * @var string
