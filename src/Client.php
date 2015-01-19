@@ -235,16 +235,15 @@ class Client
 
     private function computeSignature($key, $method, $date, $nonce, $url, $body)
     {
-        $data = $method . PHP_EOL;
-        $data .= "date:$date" . PHP_EOL;
-        $data .= "nonce:$nonce" . PHP_EOL;
+        $data = $method . "\n";
+        $data .= "date:$date" . "\n";
+        $data .= "nonce:$nonce" . "\n";
         $data .= $url;
 
         if (null != $body) {
-            $data .= PHP_EOL . $body;
+            $data .= "\n" . $body;
         }
 
         return base64_encode(hash_hmac("sha1", $data, $key, true));
     }
 }
-
