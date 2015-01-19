@@ -52,7 +52,7 @@ class OrderApi
             return null;
         }
 
-        $responseObject = $this->apiClient->deserialize($response, 'Array[\Budbee\Model\Order]');
+        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\Order]');
         return $responseObject;
     }
 

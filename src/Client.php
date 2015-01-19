@@ -114,7 +114,7 @@ class Client
         } else if (404 == $response_info['http_code']) {
             $data = null;
         } else {
-            throw new BudbeeException("Can't connect to the api: " . $url . " response code: " . $response_info['http_code']);
+            throw new BudbeeException("Can't connect to the api: " . $url . " response code: " . $response_info['http_code'] . "\n" . $response);
         }
 
         return $data;
@@ -130,7 +130,7 @@ class Client
         if (is_scalar($data) || null == $data) {
             $sanitized = $data;
         } else if ($data instanceof \DateTime) {
-            $sanitized = $data->format('U');
+            $sanitized = $data->format('U') * 1000;
         } else if (is_array($data)) {
             foreach ($data as $property => $value) {
                 $data[$property] = $this->sanitizeForSerialization($value);
