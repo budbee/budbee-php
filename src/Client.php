@@ -25,7 +25,7 @@ class Client
 {
     public static $PRODUCTION = "https://api.budbee.com"; // Production url
     public static $SANDBOX = "https://test-api.budbee.com"; // Sandbox url
-    public static $DEVELOPMENT = "http://localhost:9200"; // Internal development
+    public static $DEVELOPMENT = "http://localhost:9300"; // Internal development
 
     public static $POST = "POST";
     public static $GET = "GET";
@@ -72,50 +72,19 @@ class Client
         $nonce = $this->getNonce(20);
         $signature = $this->computeSignature($this->secretKey, $method, $timestamp, $nonce, $url, $postData);
 
-        $headers[] = "X-HMAC-Date: $timestamp";
-        $headers[] = "X-HMAC-Nonce: $nonce";
-        $headers[] = "Authorization: HmacSHA1 $this->apiKey $signature";
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_TIMEOUT, 5);
-        // return the result on success, rather than just TRUE
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        $headers = array_merge($headers, $this->getAuthHeaders($timestamp, $nonce, $this->apiKey, $signature));
 
         if (!empty($queryParams)) {
             $url = $url . '?' . http_build_query($queryParams);
         }
 
-        if ($method == static::$POST) {
-            curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
-        } else if ($method == static::$PUT) {
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
-        } else if ($method == static::$DELETE) {
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
-        } else if ($method != static::$GET) {
-            throw new BudbeeException('Method ' . $method . ' is not recognized.');
-        }
-        curl_setopt($curl, CURLOPT_URL, $url);
+        $curl = $this->configureCurl(curl_init(), $headers, $method, $postData, $url);
 
         // Make the request
-        $response = curl_exec($curl);
-        $response_info = curl_getinfo($curl);
+        $response = $this->send($curl);
 
         // Handle the response
-        if (0 == $response_info['http_code']) {
-            throw new BudbeeException("TIMEOUT: api call to " . $url . " took more than 5s to return");
-        } else if (200 == $response_info['http_code']) {
-            $data = json_decode($response);
-        } else if (401 == $response_info['http_code']) {
-            throw new BudbeeException("Unauthorized API request to " . $url . ": " . $response);
-        } else if (404 == $response_info['http_code']) {
-            $data = null;
-        } else {
-            throw new BudbeeException("Can't connect to the api: " . $url . " response code: " . $response_info['http_code'] . "\n" . $response);
-        }
+        $data = $this->handleResponse($response->data, $response->info, $url);
 
         return $data;
     }
@@ -245,5 +214,66 @@ class Client
         }
 
         return base64_encode(hash_hmac("sha1", $data, $key, true));
+    }
+
+    private function getAuthHeaders($timestamp, $nonce, $apiKey, $signature)
+    {
+        return array(
+            "X-HMAC-Date: $timestamp",
+            "X-HMAC-Nonce: $nonce",
+            "Authorization: HmacSHA1 $apiKey $signature"
+        );
+    }
+
+    private function configureCurl($ch, $headers, $method, $postData, $url)
+    {
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        // return the result on success, rather than just TRUE
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        if ($method == static::$POST) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        } else if ($method == static::$PUT) {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        } else if ($method == static::$DELETE) {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        } else if ($method != static::$GET) {
+            throw new BudbeeException('Method ' . $method . ' is not recognized.');
+        }
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        return $ch;
+    }
+
+    private function handleResponse($response, $response_info, $url)
+    {
+        if (0 == $response_info['http_code']) {
+            throw new BudbeeException("TIMEOUT: api call to " . $url . " took more than 5s to return");
+        } else if (200 == $response_info['http_code']) {
+            $data = json_decode($response);
+        } else if (204 == $response_info['http_code']) {
+            $data = true;
+        } else if (401 == $response_info['http_code']) {
+            throw new BudbeeException("Unauthorized API request to " . $url . ": " . $response);
+        } else if (404 == $response_info['http_code']) {
+            $data = null;
+        } else {
+            throw new BudbeeException("Can't connect to the api: " . $url . " response code: " . $response_info['http_code'] . "\n" . $response);
+        }
+
+        return $data;
+    }
+
+    private function send($ch)
+    {
+        $response = new \stdClass();
+        $response->data = curl_exec($ch);
+        $response->info = curl_getinfo($ch);
+
+        return $response;
     }
 }

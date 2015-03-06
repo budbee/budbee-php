@@ -16,6 +16,8 @@
  */
 namespace Budbee;
 
+use Budbee\Exception\BudbeeException;
+
 /**
  * @author Nicklas Moberg
  */
@@ -30,6 +32,7 @@ class OrderApi
     /**
      * Create order(s)
      * @param array[\Budbee\Model\Order] $body
+     * @throws \Budbee\Exception\BudbeeException if an order in the array is null
      * @return array[\Budbee\Model\Order]
      */
     public function createOrder($body) {
@@ -45,6 +48,11 @@ class OrderApi
         //make the API Call
         if (!isset($body)) {
             $body = null;
+        }
+        if (null != $body) {
+            if ($this->arrayContainsNull($body)) {
+                throw new BudbeeException("Orderarray cannot contain null");
+            }
         }
         $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
 
@@ -172,6 +180,16 @@ class OrderApi
 
         $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\Order]');
         return $responseObject;
+    }
+
+    private function arrayContainsNull($orders) {
+        foreach ($orders as $order) {
+            if (null == $order) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 
