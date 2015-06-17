@@ -41,8 +41,8 @@ class OrderApi
         $method = Client::$POST;
         $queryParams = array();
         $headerParams = array(
-            'Accept' => 'application/vnd.budbee.multiple.orders-v1+json',
-            'Content-Type' => 'application/vnd.budbee.multiple.orders-v1+json'
+            'Accept' => 'application/vnd.budbee.multiple.orders-v2+json',
+            'Content-Type' => 'application/vnd.budbee.multiple.orders-v2+json'
         );
 
         //make the API Call
