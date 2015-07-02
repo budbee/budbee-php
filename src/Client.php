@@ -227,10 +227,11 @@ class Client
 
     private function configureCurl($ch, $headers, $method, $postData, $url)
     {
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
         // return the result on success, rather than just TRUE
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // Need to reset `Expect` header
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array_merge($headers, array('Expect:')));
 
         if ($method == static::$POST) {
             curl_setopt($ch, CURLOPT_POST, true);
@@ -261,6 +262,8 @@ class Client
             throw new BudbeeException("Unauthorized API request to " . $url . ": " . $response);
         } else if (404 == $response_info['http_code']) {
             $data = null;
+        } else if (422 == $response_info['http_code']) {
+        	throw new BudbeeException("Validation errors: " . $response);
         } else {
             throw new BudbeeException("Can't connect to the api: " . $url . " response code: " . $response_info['http_code'] . "\n" . $response);
         }
