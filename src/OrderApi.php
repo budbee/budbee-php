@@ -30,10 +30,10 @@ class OrderApi
     }
 
     /**
-     * Create order(s)
-     * @param array[\Budbee\Model\Order] $body
-     * @throws \Budbee\Exception\BudbeeException if an order in the array is null
-     * @return array[\Budbee\Model\Order]
+     * Create order
+     * @param \Budbee\Model\Order $body
+     * @throws \Budbee\Exception\BudbeeException if order is null
+     * @return \Budbee\Model\Order
      */
     public function createOrder($body) {
         //parse inputs
@@ -41,18 +41,14 @@ class OrderApi
         $method = Client::$POST;
         $queryParams = array();
         $headerParams = array(
-            'Accept' => 'application/vnd.budbee.multiple.orders-v1+json',
-            'Content-Type' => 'application/vnd.budbee.multiple.orders-v1+json'
+            'Accept' => 'application/vnd.budbee.multiple.orders-v2+json',
+            'Content-Type' => 'application/vnd.budbee.multiple.orders-v2+json'
         );
 
         //make the API Call
         if (!isset($body)) {
             $body = null;
-        }
-        if (null != $body) {
-            if ($this->arrayContainsNull($body)) {
-                throw new BudbeeException("Orderarray cannot contain null");
-            }
+            throw new BudbeeException("Order cannot be null");
         }
         $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
 
@@ -60,7 +56,7 @@ class OrderApi
             return null;
         }
 
-        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\Order]');
+        $responseObject = $this->apiClient->deserialize($response, '\Budbee\Model\Order');
         return $responseObject;
     }
 
