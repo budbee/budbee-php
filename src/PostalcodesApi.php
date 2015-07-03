@@ -30,7 +30,7 @@ class PostalcodesApi
     /**
      * Check Postalcode
      * @param string $postalcode Postalcode to validate
-     * @return \Budbee\Model\GenericResponse
+     * @return boolean
      */
     public function checkPostalCode($postalcode) {
         //parse inputs
@@ -52,11 +52,11 @@ class PostalcodesApi
         $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
 
         if (!$response) {
-            return null;
+            return false;
         }
 
         $responseObject = $this->apiClient->deserialize($response, '\Budbee\Model\GenericResponse');
-        return $responseObject;
+        return "OK" == $responseObject->status;
     }
 
     /**
