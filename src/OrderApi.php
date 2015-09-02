@@ -31,7 +31,7 @@ class OrderApi
 
     /**
      * Create order
-     * @param \Budbee\Model\Order $body
+     * @param \Budbee\Model\OrderRequest $body
      * @throws \Budbee\Exception\BudbeeException if order is null
      * @return \Budbee\Model\Order
      */
@@ -47,7 +47,6 @@ class OrderApi
 
         //make the API Call
         if (!isset($body)) {
-            $body = null;
             throw new BudbeeException("Order cannot be null");
         }
         $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
@@ -57,6 +56,36 @@ class OrderApi
         }
 
         $responseObject = $this->apiClient->deserialize($response, '\Budbee\Model\Order');
+        return $responseObject;
+    }
+
+    /**
+     * Create orders
+     * @param array[\Budbee\Model\Order] $body
+     * @throws \Budbee\Exception\BudbeeException if order array is null
+     * @return array[\Budbee\Model\Order]
+     */
+    public function createOrders($body) {
+        //parse inputs
+        $resourcePath = "/multiple/orders";
+        $method = Client::$POST;
+        $queryParams = array();
+        $headerParams = array(
+            'Accept' => 'application/vnd.budbee.multiple.orders-v1+json',
+            'Content-Type' => 'application/vnd.budbee.multiple.orders-v1+json'
+        );
+
+        //make the API Call
+        if (!isset($body)) {
+            throw new BudbeeException("Orders cannot be null");
+        }
+        $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
+
+        if (!$response) {
+            return null;
+        }
+
+        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\Order]');
         return $responseObject;
     }
 

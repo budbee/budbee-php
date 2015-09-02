@@ -23,14 +23,14 @@ use Budbee\Exception\BudbeeException;
  */
 class Client
 {
-    public static $PRODUCTION = "https://api.budbee.com"; // Production url
-    public static $SANDBOX = "https://sandbox.api.budbee.com"; // Sandbox url
-    public static $DEVELOPMENT = "http://localhost:9300"; // Internal development
+    public static $PRODUCTION = 'https://api.budbee.com'; // Production url
+    public static $SANDBOX = 'https://sandbox.api.budbee.com'; // Sandbox url
+    public static $DEVELOPMENT = 'http://localhost:9300'; // Internal development
 
-    public static $POST = "POST";
-    public static $GET = "GET";
-    public static $PUT = "PUT";
-    public static $DELETE = "DELETE";
+    public static $POST = 'POST';
+    public static $GET = 'GET';
+    public static $PUT = 'PUT';
+    public static $DELETE = 'DELETE';
 
     /**
      * @param string $apiKey API key
@@ -169,7 +169,7 @@ class Client
             }
             $deserialized = $values;
         } elseif ('\DateTime' == $class) {
-            $deserialized = new \DateTime("@" . ($data / 1000), new \DateTimeZone("UTC"));
+            $deserialized = new \DateTime('@' . ($data / 1000), new \DateTimeZone('UTC'));
         } elseif (in_array($class, array('string', 'int', 'float', 'bool'))) {
             settype($data, $class);
             $deserialized = $data;
@@ -188,11 +188,11 @@ class Client
 
     private function getTimestamp()
     {
-        $now = new \DateTime("now", new \DateTimeZone("UTC"));
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
         return (string) $now->format(\DateTime::RFC1123);
     }
 
-    private function getNonce($length, $chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    private function getNonce($length, $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     {
         $randString = '';
         for ($i = 0; $i < $length; $i++) {
@@ -213,7 +213,7 @@ class Client
             $data .= "\n" . $body;
         }
 
-        return base64_encode(hash_hmac("sha1", $data, $key, true));
+        return base64_encode(hash_hmac('sha1', $data, $key, true));
     }
 
     private function getAuthHeaders($timestamp, $nonce, $apiKey, $signature)
@@ -237,10 +237,10 @@ class Client
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         } else if ($method == static::$PUT) {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         } else if ($method == static::$DELETE) {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         } else if ($method != static::$GET) {
             throw new BudbeeException('Method ' . $method . ' is not recognized.');
@@ -253,19 +253,19 @@ class Client
     private function handleResponse($response, $response_info, $url)
     {
         if (0 == $response_info['http_code']) {
-            throw new BudbeeException("TIMEOUT: api call to " . $url . " took more than 5s to return");
+            throw new BudbeeException('TIMEOUT: api call to ' . $url . ' took more than 5s to return');
         } else if (200 == $response_info['http_code']) {
             $data = json_decode($response);
         } else if (204 == $response_info['http_code']) {
             $data = true;
         } else if (401 == $response_info['http_code']) {
-            throw new BudbeeException("Unauthorized API request to " . $url . ": " . $response);
+            throw new BudbeeException('Unauthorized API request to ' . $url . ': ' . $response);
         } else if (404 == $response_info['http_code']) {
             $data = null;
         } else if (422 == $response_info['http_code']) {
-        	throw new BudbeeException("Validation errors: " . $response);
+        	throw new BudbeeException('Validation errors: ' . $response);
         } else {
-            throw new BudbeeException("Can't connect to the api: " . $url . " response code: " . $response_info['http_code'] . "\n" . $response);
+            throw new BudbeeException('Can\'t connect to the api: ' . $url . ' response code: ' . $response_info['http_code'] . "\n" . $response);
         }
 
         return $data;
