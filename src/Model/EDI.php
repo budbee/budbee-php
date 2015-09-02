@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,14 +27,14 @@ class EDI
     );
 
     /**
-    * The standard of the EDI message (e.g. X12)
-    * @var string
+     * The standard of the EDI message (e.g. X12)
+     * @var string
      */
     public $format;
 
     /**
-    * The EDI message.
-    * @var string
+     * The EDI message.
+     * @var string
      */
     public $message;
 }

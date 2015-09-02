@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,29 +33,29 @@ class Contact
     );
 
     /**
-    * The name (or business name) for the contact.
-    * @var string
+     * The name (or business name) for the contact.
+     * @var string
      */
     public $name;
 
     /**
-    * A reference person (e.g. if `name` is a company)
-    * @var string
+     * A reference person (e.g. if `name` is a company)
+     * @var string
      */
     public $referencePerson;
 
     /**
-    * @var string
+     * @var string
      */
     public $telephoneNumber;
 
     /**
-    * @var string
+     * @var string
      */
     public $email;
 
     /**
-    * @var \Budbee\Model\Address
+     * @var \Budbee\Model\Address
      */
     public $address;
 
@@ -70,8 +70,8 @@ class Contact
     public $outsideDoor;
 
     /**
-    * Additional information about the customer, e.g. door code, can leave shipment outside door etc.
-    * @var string
+     * Additional information about the customer, e.g. door code, can leave shipment outside door etc.
+     * @var string
      */
     public $additionalInfo;
 }

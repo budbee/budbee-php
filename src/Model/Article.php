@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -31,38 +31,38 @@ class Article
     );
 
     /**
-    * Article name
-    * @var string
+     * Article name
+     * @var string
      */
     public $name;
 
     /**
-    * Article reference,
-    * @var string
+     * Article reference,
+     * @var string
      */
     public $reference;
 
     /**
-    * Quantity of article.
-    * @var int
+     * Quantity of article.
+     * @var int
      */
     public $quantity;
 
     /**
-    * Price of article excl. VAT
-    * @var int
+     * Price of article excl. VAT
+     * @var int
      */
     public $unitPrice;
 
     /**
-    * Discount rate of article.
-    * @var int
+     * Discount rate of article.
+     * @var int
      */
     public $discountRate;
 
     /**
-    * Tax rate of article.
-    * @var int
+     * Tax rate of article.
+     * @var int
      */
     public $taxRate;
 }

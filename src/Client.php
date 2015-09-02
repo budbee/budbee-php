@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ use Budbee\Exception\BudbeeException;
 class Client
 {
     public static $PRODUCTION = 'https://api.budbee.com'; // Production url
-    public static $SANDBOX = 'https://sandbox.api.budbee.com'; // Sandbox url
+    public static $SANDBOX = 'http://sandbox.api.budbee.com'; // Sandbox url
     public static $DEVELOPMENT = 'http://localhost:9300'; // Internal development
 
     public static $POST = 'POST';
@@ -37,10 +37,82 @@ class Client
      * @param string $secretKey secret key
      * @param string $env Environment
      */
-    function __construct($apiKey, $secretKey, $env = null) {
+    function __construct($apiKey, $secretKey, $env = null)
+    {
         $this->apiKey = $apiKey;
         $this->secretKey = $secretKey;
         $this->env = null != $env ? $env : static::$PRODUCTION;
+    }
+
+    /**
+     * Take value and turn it into a string suitable for inclusion in the path, by url-encoding.
+     * @param string $value a string which will be part of the path
+     * @return string the serialized object
+     */
+    public static function toPathValue($value)
+    {
+        return rawurlencode($value);
+    }
+
+    /**
+     * Take value and turn it into a string suitable for inclusion in the query, by imploding comma-separated if it's an
+     * object. If it's a string, pass through unchanged. It will be url-encoded later.
+     * @param object $object an object to be serialized to a string
+     * @return string the serialized object
+     */
+    public static function toQueryValue($object)
+    {
+        if (is_array($object)) {
+            return implode(',', $object);
+        } else {
+            return $object;
+        }
+    }
+
+    /**
+     * Just pass through the header value for now. Placeholder in case we find out we need to do something with header
+     * values.
+     * @param string $value a string which will be part of the header
+     * @return string the header string
+     */
+    public static function toHeaderValue($value)
+    {
+        return $value;
+    }
+
+    /**
+     * Deserialize a JSON string into an object.
+     * @param object $data object or primitive to be deserialized
+     * @param string $class class name is passed as a string
+     * @return object an instance of $class
+     */
+    public static function deserialize($data, $class)
+    {
+        if (null == $data) {
+            $deserialized = null;
+        } elseif ('array[' == substr($class, 0, 6)) {
+            $subClass = substr($class, 6, -1);
+            $values = array();
+            foreach ($data as $value) {
+                $values[] = static::deserialize($value, $subClass);
+            }
+            $deserialized = $values;
+        } elseif ('\DateTime' == $class) {
+            $deserialized = new \DateTime('@' . ($data / 1000), new \DateTimeZone('UTC'));
+        } elseif (in_array($class, array('string', 'int', 'float', 'bool'))) {
+            settype($data, $class);
+            $deserialized = $data;
+        } else {
+            $instance = new $class();
+            foreach ($instance::$dataTypes as $property => $type) {
+                if (isset($data->$property)) {
+                    $instance->$property = static::deserialize($data->$property, $type);
+                }
+            }
+            $deserialized = $instance;
+        }
+
+        return $deserialized;
     }
 
     /**
@@ -52,7 +124,8 @@ class Client
      * @throws BudbeeException
      * @return mixed
      */
-    public function callAPI($resourcePath, $method, $queryParams, $postData, $headerParams) {
+    public function callAPI($resourcePath, $method, $queryParams, $postData, $headerParams)
+    {
         $headers = array();
 
         if ($headerParams != null) {
@@ -112,84 +185,16 @@ class Client
             }
             $sanitized = $values;
         } else {
-            $sanitized = (string) $data;
+            $sanitized = (string)$data;
         }
 
         return $sanitized;
     }
 
-    /**
-     * Take value and turn it into a string suitable for inclusion in the path, by url-encoding.
-     * @param string $value a string which will be part of the path
-     * @return string the serialized object
-     */
-    public static function toPathValue($value) {
-        return rawurlencode($value);
-    }
-
-    /**
-     * Take value and turn it into a string suitable for inclusion in the query, by imploding comma-separated if it's an
-     * object. If it's a string, pass through unchanged. It will be url-encoded later.
-     * @param object $object an object to be serialized to a string
-     * @return string the serialized object
-     */
-    public static function toQueryValue($object) {
-        if (is_array($object)) {
-            return implode(',', $object);
-        } else {
-            return $object;
-        }
-    }
-
-    /**
-     * Just pass through the header value for now. Placeholder in case we find out we need to do something with header
-     * values.
-     * @param string $value a string which will be part of the header
-     * @return string the header string
-     */
-    public static function toHeaderValue($value) {
-        return $value;
-    }
-
-    /**
-     * Deserialize a JSON string into an object.
-     * @param object $data object or primitive to be deserialized
-     * @param string $class class name is passed as a string
-     * @return object an instance of $class
-     */
-    public static function deserialize($data, $class)
-    {
-        if (null == $data) {
-            $deserialized = null;
-        } elseif ('array[' == substr($class, 0, 6)) {
-            $subClass = substr($class, 6, -1);
-            $values = array();
-            foreach ($data as $value) {
-                $values[] = static::deserialize($value, $subClass);
-            }
-            $deserialized = $values;
-        } elseif ('\DateTime' == $class) {
-            $deserialized = new \DateTime('@' . ($data / 1000), new \DateTimeZone('UTC'));
-        } elseif (in_array($class, array('string', 'int', 'float', 'bool'))) {
-            settype($data, $class);
-            $deserialized = $data;
-        } else {
-            $instance = new $class();
-            foreach ($instance::$dataTypes as $property => $type) {
-                if (isset($data->$property)) {
-                    $instance->$property = static::deserialize($data->$property, $type);
-                }
-            }
-            $deserialized = $instance;
-        }
-
-        return $deserialized;
-    }
-
     private function getTimestamp()
     {
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
-        return (string) $now->format(\DateTime::RFC1123);
+        return (string)$now->format(\DateTime::RFC1123);
     }
 
     private function getNonce($length, $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -250,6 +255,15 @@ class Client
         return $ch;
     }
 
+    private function send($ch)
+    {
+        $response = new \stdClass();
+        $response->data = curl_exec($ch);
+        $response->info = curl_getinfo($ch);
+
+        return $response;
+    }
+
     private function handleResponse($response, $response_info, $url)
     {
         if (0 == $response_info['http_code']) {
@@ -263,20 +277,11 @@ class Client
         } else if (404 == $response_info['http_code']) {
             $data = null;
         } else if (422 == $response_info['http_code']) {
-        	throw new BudbeeException('Validation errors: ' . $response);
+            throw new BudbeeException('Validation errors: ' . $response);
         } else {
             throw new BudbeeException('Can\'t connect to the api: ' . $url . ' response code: ' . $response_info['http_code'] . "\n" . $response);
         }
 
         return $data;
-    }
-
-    private function send($ch)
-    {
-        $response = new \stdClass();
-        $response->data = curl_exec($ch);
-        $response->info = curl_getinfo($ch);
-
-        return $response;
     }
 }

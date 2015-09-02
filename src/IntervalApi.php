@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,7 +23,8 @@ class IntervalApi
 {
     private $apiClient;
 
-    function __construct(Client $apiClient) {
+    function __construct(Client $apiClient)
+    {
         $this->apiClient = $apiClient;
     }
 
@@ -32,7 +33,8 @@ class IntervalApi
      * @param int $n The number of intervals you want to get
      * @return array[\Budbee\Model\OrderInterval]
      */
-    public function getIntervals($n) {
+    public function getIntervals($n)
+    {
         //parse inputs
         $resourcePath = "/multiple/intervals/{n}";
         $method = Client::$GET;
@@ -64,7 +66,8 @@ class IntervalApi
      * @param string $date Get all intervals up to and including this date in format "YYYY-MM-DD".
      * @return array[\Budbee\Model\OrderInterval]
      */
-    public function getIntervalsToDate($date) {
+    public function getIntervalsToDate($date)
+    {
         //parse inputs
         $resourcePath = "/multiple/intervals/{date}";
         $method = Client::$GET;

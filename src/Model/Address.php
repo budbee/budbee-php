@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ class Address
     );
 
     /**
-    * @var string
+     * @var string
      */
     public $street;
 
@@ -40,18 +40,18 @@ class Address
     public $street2;
 
     /**
-    * @var string
+     * @var string
      */
     public $postalCode;
 
     /**
-    * @var string
+     * @var string
      */
     public $city;
 
     /**
-    * Country code
-    * @var string
+     * Country code
+     * @var string
      */
     public $country;
 }

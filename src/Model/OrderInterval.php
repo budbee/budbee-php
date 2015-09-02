@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,14 +27,14 @@ class OrderInterval
     );
 
     /**
-    * Collection interval
-    * @var \Budbee\Model\Interval
+     * Collection interval
+     * @var \Budbee\Model\Interval
      */
     public $collection;
 
     /**
-    * Delivery interval
-    * @var \Budbee\Model\Interval
+     * Delivery interval
+     * @var \Budbee\Model\Interval
      */
     public $delivery;
 }
