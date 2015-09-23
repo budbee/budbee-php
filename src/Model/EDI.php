@@ -16,10 +16,12 @@
  */
 namespace Budbee\Model;
 
+use \JsonSerializable;
+
 /**
  * @author Nicklas Moberg
  */
-class EDI
+class EDI implements JsonSerializable
 {
     static $dataTypes = array(
         'format' => 'string',
@@ -37,5 +39,12 @@ class EDI
      * @var string
      */
     public $message;
-}
 
+    public function jsonSerialize()
+    {
+    	return array(
+    		'format' => $this->format,
+    		'message' => $this->message
+    	);
+    }
+}

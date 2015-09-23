@@ -16,10 +16,12 @@
  */
 namespace Budbee\Model;
 
+use \JsonSerializable;
+
 /**
  * @author Nicklas Moberg
  */
-class Order
+class Order implements JsonSerializable
 {
     static $dataTypes = array(
         'id' => 'string',
@@ -65,5 +67,16 @@ class Order
      * @var \Budbee\Model\Contact
      */
     public $delivery;
-}
 
+    public function jsonSerialize()
+    {
+    	return array(
+    		'id' => $this->id,
+    		'interval' => $this->interval,
+    		'cart' => $this->cart,
+    		'edi' => $this->edi,
+    		'collection' => $this->collection,
+    		'delivery' => $this->delivery
+    	);
+    }
+}

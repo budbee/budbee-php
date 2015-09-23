@@ -16,10 +16,12 @@
  */
 namespace Budbee\Model;
 
+use \JsonSerializable;
+
 /**
  * @author Nicklas Moberg
  */
-class GenericResponse
+class GenericResponse implements JsonSerializable
 {
     static $dataTypes = array(
         'status' => 'string',
@@ -37,5 +39,12 @@ class GenericResponse
      * @var string
      */
     public $message;
-}
 
+    public function jsonSerialize()
+    {
+    	return array(
+    		'status' => $this->status,
+    		'message' => $this->message
+    	);
+    }
+}

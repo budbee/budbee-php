@@ -16,10 +16,12 @@
  */
 namespace Budbee\Model;
 
+use \JsonSerializable;
+
 /**
  * @author Nicklas Moberg
  */
-class Interval
+class Interval implements JsonSerializable
 {
     static $dataTypes = array(
         'start' => '\DateTime',
@@ -37,5 +39,12 @@ class Interval
      * @var \DateTime
      */
     public $stop;
-}
 
+    public function jsonSerialize()
+    {
+    	return array(
+    		'start' => $this->start->format('U') * 1000,
+    		'stop' => $this->stop->format('U') * 1000
+    	);
+    }
+}
