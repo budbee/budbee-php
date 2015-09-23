@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,20 +28,20 @@ class Cart
     );
 
     /**
-    * The cart ID of the end users purchase
-    * @var string
+     * The cart ID of the end users purchase
+     * @var string
      */
     public $cartId;
 
     /**
-    * List of articles belonging to this cart.
-    * @var array[\Budbee\Model\Article]
+     * List of articles belonging to this cart.
+     * @var array[\Budbee\Model\Article]
      */
     public $articles;
 
     /**
-    * The dimensions of the entire shipment.
-    * @var \Budbee\Model\Dimensions
+     * The dimensions of the entire shipment.
+     * @var \Budbee\Model\Dimensions
      */
     public $dimensions;
 }

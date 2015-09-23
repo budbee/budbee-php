@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,26 +29,26 @@ class Dimensions
     );
 
     /**
-    * Width of shipment in cm.
-    * @var int
+     * Width of shipment in cm.
+     * @var int
      */
     public $width;
 
     /**
-    * Length of shipment in cm.
-    * @var int
+     * Length of shipment in cm.
+     * @var int
      */
     public $length;
 
     /**
-    * Height of shipment in cm.
-    * @var int
+     * Height of shipment in cm.
+     * @var int
      */
     public $height;
 
     /**
-    * Weight of shipment in cm.
-    * @var int
+     * Weight of shipment in cm.
+     * @var int
      */
     public $weight;
 }

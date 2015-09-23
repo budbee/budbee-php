@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,7 +23,8 @@ class PostalcodesApi
 {
     private $apiClient;
 
-    function __construct(Client $apiClient) {
+    function __construct(Client $apiClient)
+    {
         $this->apiClient = $apiClient;
     }
 
@@ -32,7 +33,8 @@ class PostalcodesApi
      * @param string $postalcode Postalcode to validate
      * @return boolean
      */
-    public function checkPostalCode($postalcode) {
+    public function checkPostalCode($postalcode)
+    {
         //parse inputs
         $resourcePath = "/postalcodes/validate/{postalcode}";
         $method = Client::$GET;
@@ -63,7 +65,8 @@ class PostalcodesApi
      * Get Postalcodes
      * @return array[string]
      */
-    public function getPostalCodes() {
+    public function getPostalCodes()
+    {
         //parse inputs
         $resourcePath = "/postalcodes";
         $method = Client::$GET;

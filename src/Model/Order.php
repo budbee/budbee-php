@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -31,38 +31,38 @@ class Order
     );
 
     /**
-    * Order ID
-    * @var string
+     * Order ID
+     * @var string
      */
     public $id;
 
     /**
-    * Order interval.
-    * @var \Budbee\Model\OrderInterval
+     * Order interval.
+     * @var \Budbee\Model\OrderInterval
      */
     public $interval;
 
     /**
-    * Cart
-    * @var \Budbee\Model\Cart
+     * Cart
+     * @var \Budbee\Model\Cart
      */
     public $cart;
 
     /**
-    * EDI
-    * @var \Budbee\Model\EDI
+     * EDI
+     * @var \Budbee\Model\EDI
      */
     public $edi;
 
     /**
-    * Collection contact information.
-    * @var \Budbee\Model\Contact
+     * Collection contact information.
+     * @var \Budbee\Model\Contact
      */
     public $collection;
 
     /**
-    * Delivery contact information.
-    * @var \Budbee\Model\Contact
+     * Delivery contact information.
+     * @var \Budbee\Model\Contact
      */
     public $delivery;
 }

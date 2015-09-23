@@ -19,23 +19,44 @@ namespace Budbee\Model;
 /**
  * @author Nicklas Moberg
  */
-class EDI
+class OrderRequest
 {
     static $dataTypes = array(
-        'format' => 'string',
-        'message' => 'string'
+        'interval' => '\Budbee\Model\OrderInterval',
+        'cart' => '\Budbee\Model\Cart',
+        'edi' => '\Budbee\Model\EDI',
+        'collectionId' => 'int',
+        'delivery' => '\Budbee\Model\Contact'
     );
 
     /**
-     * The standard of the EDI message (e.g. X12)
-     * @var string
+     * Order interval.
+     * @var \Budbee\Model\OrderInterval
      */
-    public $format;
+    public $interval;
 
     /**
-     * The EDI message.
-     * @var string
+     * Cart
+     * @var \Budbee\Model\Cart
      */
-    public $message;
+    public $cart;
+
+    /**
+     * EDI
+     * @var \Budbee\Model\EDI
+     */
+    public $edi;
+
+    /**
+     * Collection contact id.
+     * @var int
+     */
+    public $collectionId;
+
+    /**
+     * Delivery contact information.
+     * @var \Budbee\Model\Contact
+     */
+    public $delivery;
 }
 

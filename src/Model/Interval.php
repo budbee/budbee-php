@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2014 Sendus Sverige AB.
+ *  Copyright 2014 Budbee AB.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,14 +27,14 @@ class Interval
     );
 
     /**
-    * Start of interval
-    * @var \DateTime
+     * Start of interval
+     * @var \DateTime
      */
     public $start;
 
     /**
-    * End of interval
-    * @var \DateTime
+     * End of interval
+     * @var \DateTime
      */
     public $stop;
 }
