@@ -16,10 +16,12 @@
  */
 namespace Budbee\Model;
 
+use \JsonSerializable;
+
 /**
  * @author Nicklas Moberg
  */
-class Contact
+class Contact implements JsonSerializable
 {
     static $dataTypes = array(
         'name' => 'string',
@@ -74,5 +76,18 @@ class Contact
      * @var string
      */
     public $additionalInfo;
-}
 
+    public function jsonSerialize()
+    {
+    	return array(
+    		'name' => $this->name,
+    		'referencePerson' => $this->referencePerson,
+    		'telephoneNumber' => $this->telephoneNumber,
+    		'email' => $this->email,
+    		'address' => $this->address,
+    		'doorCode' => $this->doorCode,
+    		'outsideDoor' => $this->outsideDoor,
+    		'additionalInfo' => $this->additionalInfo
+    	);
+    }
+}

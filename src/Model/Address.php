@@ -16,10 +16,12 @@
  */
 namespace Budbee\Model;
 
+use \JsonSerializable;
+
 /**
  * @author Nicklas Moberg
  */
-class Address
+class Address implements JsonSerializable
 {
     static $dataTypes = array(
         'street' => 'string',
@@ -54,5 +56,15 @@ class Address
      * @var string
      */
     public $country;
-}
 
+    public function jsonSerialize()
+    {
+    	return array(
+    		'street' => $this->street,
+    		'street2' => $this->street2,
+    		'postalCode' => $this->postalCode,
+    		'city' => $this->city,
+    		'country' => $this->country
+    	);
+    }
+}

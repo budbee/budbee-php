@@ -137,7 +137,7 @@ class Client
         $url = $this->env . $resourcePath;
 
         if (is_object($postData) or is_array($postData)) {
-            $postData = json_encode($this->sanitizeForSerialization($postData));
+            $postData = json_encode($postData);
         }
 
         # Add authorization header
@@ -160,35 +160,6 @@ class Client
         $data = $this->handleResponse($response->data, $response->info, $url);
 
         return $data;
-    }
-
-    /**
-     * Build a JSON POST object
-     * @param mixed $data
-     * @return string|array
-     */
-    protected function sanitizeForSerialization($data)
-    {
-        if (is_scalar($data) || null == $data) {
-            $sanitized = $data;
-        } else if ($data instanceof \DateTime) {
-            $sanitized = $data->format('U') * 1000;
-        } else if (is_array($data)) {
-            foreach ($data as $property => $value) {
-                $data[$property] = $this->sanitizeForSerialization($value);
-            }
-            $sanitized = $data;
-        } else if (is_object($data)) {
-            $values = array();
-            foreach (array_keys($data::$dataTypes) as $property) {
-                $values[$property] = $this->sanitizeForSerialization($data->$property);
-            }
-            $sanitized = $values;
-        } else {
-            $sanitized = (string)$data;
-        }
-
-        return $sanitized;
     }
 
     private function getTimestamp()

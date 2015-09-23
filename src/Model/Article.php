@@ -16,10 +16,12 @@
  */
 namespace Budbee\Model;
 
+use \JsonSerializable;
+
 /**
  * @author Nicklas Moberg
  */
-class Article
+class Article implements JsonSerializable
 {
     static $dataTypes = array(
         'name' => 'string',
@@ -65,5 +67,16 @@ class Article
      * @var int
      */
     public $taxRate;
-}
 
+    public function jsonSerialize()
+    {
+    	return array(
+    		'name' => $this->name,
+    		'reference' => $this->reference,
+    		'quantity' => $this->quantity,
+    		'unitPrice' => $this->unitPrice,
+    		'discountRate' => $this->discountRate,
+    		'taxRate' => $this->taxRate
+    	);
+    }
+}

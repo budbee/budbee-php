@@ -16,10 +16,12 @@
  */
 namespace Budbee\Model;
 
+use \JsonSerializable;
+
 /**
  * @author Nicklas Moberg
  */
-class Dimensions
+class Dimensions implements JsonSerializable
 {
     static $dataTypes = array(
         'width' => 'int',
@@ -51,5 +53,14 @@ class Dimensions
      * @var int
      */
     public $weight;
-}
 
+    public function jsonSerialize()
+    {
+    	return array(
+    		'width' => $this->width,
+    		'length' => $this->length,
+    		'height' => $this->height,
+    		'weight' => $this->weight
+    	);
+    }
+}

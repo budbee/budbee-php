@@ -16,10 +16,12 @@
  */
 namespace Budbee\Model;
 
+use \JsonSerializable;
+
 /**
  * @author Nicklas Moberg
  */
-class OrderInterval
+class OrderInterval implements JsonSerializable
 {
     static $dataTypes = array(
         'collection' => '\Budbee\Model\Interval',
@@ -37,5 +39,12 @@ class OrderInterval
      * @var \Budbee\Model\Interval
      */
     public $delivery;
-}
 
+    public function jsonSerialize()
+    {
+    	return array(
+    		'collection' => $this->collection,
+    		'delivery' => $this->delivery
+    	);
+    }
+}

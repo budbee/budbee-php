@@ -16,10 +16,12 @@
  */
 namespace Budbee\Model;
 
+use \JsonSerializable;
+
 /**
  * @author Nicklas Moberg
  */
-class Cart
+class Cart implements JsonSerializable
 {
     static $dataTypes = array(
         'cartId' => 'string',
@@ -44,5 +46,13 @@ class Cart
      * @var \Budbee\Model\Dimensions
      */
     public $dimensions;
-}
 
+    public function jsonSerialize()
+    {
+    	return array(
+    		'cartId' => $this->cartId,
+    		'articles' => $this->articles,
+    		'dimensions' => $this->dimensions
+    	);
+    }
+}
