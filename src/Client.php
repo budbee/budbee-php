@@ -246,7 +246,9 @@ class Client
         } else if (401 == $response_info['http_code']) {
             throw new BudbeeException('Unauthorized API request to ' . $url . ': ' . $response);
         } else if (404 == $response_info['http_code']) {
-            $data = null;
+            throw new BudbeeException($response);
+        } else if (412 == $response_info['http_code']) {
+            throw new BudbeeException($response);
         } else if (422 == $response_info['http_code']) {
             throw new BudbeeException('Validation errors: ' . $response);
         } else {
