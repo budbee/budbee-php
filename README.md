@@ -6,6 +6,12 @@ Add budbee-php to your ```composer.json``` file
 
 ```php
 {
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/budbee/budbee-php"
+        }
+    ],
     "require": {
         "budbee/budbee-php": "*"
     }
@@ -29,8 +35,6 @@ Require the wrapper
 <?php
   require_once('vendor/autoload.php');
   
-  use Budbee\Model;
-  
   $apiKey = '<YOUR_API_KEY>';
   $apiSecret = '<YOUR_API_SECRET>';
   
@@ -52,12 +56,13 @@ if(!$postalCodesAPI->checkPostalCode('11453')) {
 Get the next upcoming delivery interval
 
 ```php
-$interval = $intervalAPI->getIntervals(1)[0];
-if($interval) {
-  echo 'Budbee can deliver between: ' + $interval->delivery->start + ' and ' + $interval->delivery->stop;
-} else {
-  die('No upcoming delivery intervals');
+try {
+    $interval = $intervalAPI->getIntervals(1)[0];
+} catch (\Bubdee\BudbeeException $e) {
+    die('No upcoming delivery intervals');
 }
+
+echo 'Budbee can deliver between: ' + $interval->delivery->start + ' and ' + $interval->delivery->stop;
 ```
 
 Create an order
@@ -80,7 +85,7 @@ $article->unitPrice = 4900;
 $article->discountRate = 0;
 $article->taxRate = 2500;
 
-$cart->articles = [article];
+$cart->articles = [$article];
 
 $order->cart = $cart;
 
