@@ -45,7 +45,7 @@ Require the wrapper
 ?>
 ```
 
-Validate a postalcode
+## Validate a postalcode
 
 ```php
 if(!$postalCodesAPI->checkPostalCode('11453')) {
@@ -53,7 +53,7 @@ if(!$postalCodesAPI->checkPostalCode('11453')) {
 }
 ```
 
-Get the next upcoming delivery interval
+## Get the next upcoming delivery interval
 
 ```php
 try {
@@ -65,7 +65,7 @@ try {
 echo 'Budbee can deliver between: ' + $interval->delivery->start + ' and ' + $interval->delivery->stop;
 ```
 
-Create an order
+## Create an order
 
 ```php
 // Create Order Object
