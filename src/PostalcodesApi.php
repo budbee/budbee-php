@@ -31,7 +31,7 @@ class PostalcodesApi
     /**
      * Check Postalcode
      * @param string $postalcode Postalcode to validate
-     * @return boolean
+     * @return array[\Budbee\Model\CollectionPoint] An array of collectionpoints in range of the postalcode
      */
     public function checkPostalCode($postalcode)
     {
@@ -40,8 +40,8 @@ class PostalcodesApi
         $method = Client::$GET;
         $queryParams = array();
         $headerParams = array(
-            'Accept' => 'application/vnd.budbee.postalcodes-v1+json',
-            'Content-Type' => 'application/vnd.budbee.postalcodes-v1+json'
+            'Accept' => 'application/vnd.budbee.postalcodes-v2+json',
+            'Content-Type' => 'application/vnd.budbee.postalcodes-v2+json'
         );
 
         if (null != $postalcode) {
@@ -57,8 +57,9 @@ class PostalcodesApi
             return false;
         }
 
-        $responseObject = $this->apiClient->deserialize($response, '\Budbee\Model\GenericResponse');
-        return "OK" == $responseObject->status;
+        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\CollectionPoint]');
+
+        return $responseObject;
     }
 
     /**

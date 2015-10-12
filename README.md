@@ -2,7 +2,7 @@
 This repository is a PHP wrapper of the budbee Open API. The API is used to create Order bookings at budbee.
 
 # Installation
-Add budbee-php to your ```composer.json``` file
+Add budbee-php to your `composer.json` file
 
 ```php
 {
@@ -27,40 +27,52 @@ To create an Order a user needs to:
  2. Request an available delivery interval.
  3. Post an Order with an accepted delivery postalcode and an acceptable delivery interval
 
-## Setup 
+## Setup
 
 Require the wrapper
 
 ```php
-<?php
-  require_once('vendor/autoload.php');
-  
-  $apiKey = '<YOUR_API_KEY>';
-  $apiSecret = '<YOUR_API_SECRET>';
-  
-  $client = new \Budbee\Client($apiKey, $apiSecret, Budbee\Client::$SANDBOX);
-  $postalCodesAPI = new \Budbee\PostalcodesApi($client);
-  $intervalAPI = new \Budbee\IntervalApi($client);
-  $orderAPI = new \Budbee\OrderApi($client);
-?>
+require_once('vendor/autoload.php');
+
+$apiKey = '<YOUR_API_KEY>';
+$apiSecret = '<YOUR_API_SECRET>';
+
+$client = new \Budbee\Client($apiKey, $apiSecret, Budbee\Client::$SANDBOX);
+$postalCodesAPI = new \Budbee\PostalcodesApi($client);
+$intervalAPI = new \Budbee\IntervalApi($client);
+$orderAPI = new \Budbee\OrderApi($client);
 ```
 
 ## Validate a postalcode
 
 ```php
-if(!$postalCodesAPI->checkPostalCode('11453')) {
-  die('Budbee does not deliver to specified Postal Code');
+try {
+    $possibleCollectionPoints = $postalCodesAPI->checkPostalCode('11453');
+} catch (\Budbee\Exception\BudbeeException $e) {
+    die('Budbee does not deliver to specified Postal Code');
 }
+```
+
+## Select collection point (optional)
+
+Usually there will only be one default collection point and in that case, it will be automatically selected when an
+order is selected, but sometimes you have multiple collection points depending on delivery address and might want to
+choose where Budbee will pick up the order:
+
+```php
+$collectionId = $possibleCollectionPoints[0]->id;
 ```
 
 ## Get the next upcoming delivery interval
 
 ```php
 try {
-    $interval = $intervalAPI->getIntervals(1)[0];
-} catch (\Bubdee\BudbeeException $e) {
+    $intervals = $intervalAPI->getIntervals(1);
+} catch (\Budbee\Exception\BudbeeException $e) {
     die('No upcoming delivery intervals');
 }
+
+$interval = $intervals[0];
 
 echo 'Budbee can deliver between: ' + $interval->delivery->start + ' and ' + $interval->delivery->stop;
 ```
@@ -105,11 +117,10 @@ $deliveryAddress->country = 'SE';
 
 $deliveryContact->address = $deliveryAddress;
 
+// $order->collectionId = $collectionId;
 $order->delivery = $deliveryContact;
 
 $createdOrder = $orderAPI->createOrder($order);
 
-echo 'Created Order: ';
-echo json_encode($createdOrder);
-
+echo 'Created Order';
 ```
