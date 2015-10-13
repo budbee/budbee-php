@@ -13,7 +13,7 @@ Add budbee-php to your ```composer.json``` file
         }
     ],
     "require": {
-        "budbee/budbee-php": "*"
+        "budbee/api-client": "dev-master"
     }
 }
 ```
