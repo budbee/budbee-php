@@ -30,21 +30,23 @@ class IntervalApi
 
     /**
      * Get intervals
+     * @param string $postalCode The postalcode to get intervals for
      * @param int $n The number of intervals you want to get
      * @return array[\Budbee\Model\OrderInterval]
      */
-    public function getIntervals($n)
+    public function getIntervals($postalCode, $n)
     {
         //parse inputs
-        $resourcePath = "/multiple/intervals/{n}";
+        $resourcePath = "/multiple/intervals/{postalCode}/{n}";
         $method = Client::$GET;
         $queryParams = array();
         $headerParams = array(
-            'Accept' => 'application/vnd.budbee.intervals-v1+json',
-            'Content-Type' => 'application/vnd.budbee.intervals-v1+json'
+            'Accept' => 'application/vnd.budbee.intervals-v2+json',
+            'Content-Type' => 'application/vnd.budbee.intervals-v2+json'
         );
 
         if (null != $n) {
+        	$resourcePath = str_replace("{postalCode}", $this->apiClient->toPathValue($postalCode), $resourcePath);
             $resourcePath = str_replace("{n}", $this->apiClient->toPathValue($n), $resourcePath);
         }
         //make the API Call
@@ -57,27 +59,29 @@ class IntervalApi
             return null;
         }
 
-        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\OrderInterval]');
+        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\OrderIntervalResponse]');
         return $responseObject;
     }
 
     /**
      * Get intervals
+     * @param string $postalCode The postalcode to get intervals for
      * @param string $date Get all intervals up to and including this date in format "YYYY-MM-DD".
      * @return array[\Budbee\Model\OrderInterval]
      */
-    public function getIntervalsToDate($date)
+    public function getIntervalsToDate($postalCode, $date)
     {
         //parse inputs
-        $resourcePath = "/multiple/intervals/{date}";
+        $resourcePath = "/multiple/intervals/{postalCode}/{date}";
         $method = Client::$GET;
         $queryParams = array();
         $headerParams = array(
-            'Accept' => 'application/vnd.budbee.intervals-v1+json',
-            'Content-Type' => 'application/vnd.budbee.intervals-v1+json'
+            'Accept' => 'application/vnd.budbee.intervals-v2+json',
+            'Content-Type' => 'application/vnd.budbee.intervals-v2+json'
         );
 
         if (null != $date) {
+        	$resourcePath = str_replace("{postalCode}", $this->apiClient->toPathValue($postalCode), $resourcePath);
             $resourcePath = str_replace("{date}", $this->apiClient->toPathValue($date), $resourcePath);
         }
         //make the API Call
@@ -90,7 +94,7 @@ class IntervalApi
             return null;
         }
 
-        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\OrderInterval]');
+        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\OrderIntervalResponse]');
         return $responseObject;
     }
 }
