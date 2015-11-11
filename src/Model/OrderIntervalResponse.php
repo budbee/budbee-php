@@ -26,7 +26,7 @@ class OrderIntervalResponse implements JsonSerializable
 	static $dataTypes = array(
 		'collection' => '\Budbee\Model\Interval',
 		'delivery' => '\Budbee\Model\Interval',
-		'collectionPointId' => 'int'
+		'collectionPointIds' => 'array[int]'
 	);
 
 	/**
@@ -45,14 +45,14 @@ class OrderIntervalResponse implements JsonSerializable
 	 * Supported collection point
 	 * @var int
 	 */
-	public $collectionPointId;
+	public $collectionPointIds;
 
 	public function jsonSerialize()
 	{
 		return array(
 			'collection' => $this->collection,
 			'delivery' => $this->delivery,
-			'collectionPointId' => $this->collectionPointId
+			'collectionPointIds' => $this->collectionPointIds
 		);
 	}
 }
