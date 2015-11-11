@@ -37,7 +37,7 @@ class IntervalApi
     public function getIntervals($postalCode, $n)
     {
         //parse inputs
-        $resourcePath = "/multiple/intervals/{postalCode}/{n}";
+        $resourcePath = "/intervals/{postalCode}/{n}";
         $method = Client::$GET;
         $queryParams = array();
         $headerParams = array(
@@ -72,7 +72,7 @@ class IntervalApi
     public function getIntervalsToDate($postalCode, $date)
     {
         //parse inputs
-        $resourcePath = "/multiple/intervals/{postalCode}/{date}";
+        $resourcePath = "/intervals/{postalCode}/{date}";
         $method = Client::$GET;
         $queryParams = array();
         $headerParams = array(
