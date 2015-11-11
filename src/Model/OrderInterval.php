@@ -40,6 +40,12 @@ class OrderInterval implements JsonSerializable
      */
     public $delivery;
 
+    public function __construct(\Budbee\Model\Interval $collection = null, \Budbee\Model\Interval $delivery = null)
+    {
+    	$this->collection = $collection;
+    	$this->delivery = $delivery;
+    }
+
     public function jsonSerialize()
     {
     	return array(
