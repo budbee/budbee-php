@@ -32,7 +32,7 @@ class IntervalApi
      * Get intervals
      * @param string $postalCode The postalcode to get intervals for
      * @param int $n The number of intervals you want to get
-     * @return array[\Budbee\Model\OrderInterval]
+     * @return array[\Budbee\Model\OrderIntervalResponse]
      */
     public function getIntervals($postalCode, $n)
     {
