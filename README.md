@@ -32,15 +32,17 @@ To create an Order a user needs to:
 Require the wrapper
 
 ```php
-require_once('vendor/autoload.php');
+<?php
+  require_once('vendor/autoload.php');
 
-$apiKey = '<YOUR_API_KEY>';
-$apiSecret = '<YOUR_API_SECRET>';
+  $apiKey = '<YOUR_API_KEY>';
+  $apiSecret = '<YOUR_API_SECRET>';
 
-$client = new \Budbee\Client($apiKey, $apiSecret, Budbee\Client::$SANDBOX);
-$postalCodesAPI = new \Budbee\PostalcodesApi($client);
-$intervalAPI = new \Budbee\IntervalApi($client);
-$orderAPI = new \Budbee\OrderApi($client);
+  $client = new \Budbee\Client($apiKey, $apiSecret, Budbee\Client::$SANDBOX);
+  $postalCodesAPI = new \Budbee\PostalcodesApi($client);
+  $intervalAPI = new \Budbee\IntervalApi($client);
+  $orderAPI = new \Budbee\OrderApi($client);
+?>
 ```
 
 ## Validate a postalcode
@@ -63,33 +65,36 @@ choose where Budbee will pick up the order:
 $collectionId = $possibleCollectionPoints[0]->id;
 ```
 
-## Get the next upcoming delivery interval
+## Get upcoming delivery intervals
 
 ```php
 try {
-    $intervals = $intervalAPI->getIntervals(1);
+    $intervalResponse = $intervalAPI->getIntervals($deliveryAddress->postalCode, 2);
 } catch (\Budbee\Exception\BudbeeException $e) {
     die('No upcoming delivery intervals');
 }
 
-$interval = $intervals[0];
+$firstInterval = $intervalResponse[0];
+$interval = new \Budbee\Model\OrderInterval($firstInterval->collection, $firstInterval->delivery);
 
 echo 'Budbee can deliver between: ' + $interval->delivery->start + ' and ' + $interval->delivery->stop;
+
 ```
 
 ## Create an order
 
 ```php
 // Create Order Object
-$order = new OrderRequest();
+$order = new \Budbee\Model\OrderRequest();
 $order->interval = $interval;
+$order->collectionId = $firstInterval->collectionPointId;
 
 // Create Cart Object
-$cart = new Cart();
+$cart = new \Budbee\Model\Cart();
 $cart->cartId = '12345';
 
 // Create an Article
-$article = new Article();
+$article = new \Budbee\Model\Article();
 $article->name = 'T-Shirt';
 $article->reference = '61252123';
 $article->quantity = 1;
@@ -102,14 +107,14 @@ $cart->articles = [$article];
 $order->cart = $cart;
 
 // Specify Delivery information
-$deliveryContact = new Contact();
+$deliveryContact = new \Budbee\Model\Contact();
 $deliveryContact->name = 'John Doe';
 $deliveryContact->telephoneNumber = '00 123 45 67';
 $deliveryContact->email = 'john.doe@budbee.com';
 $deliveryContact->doorCode = '0000';
 $deliveryContact->outsideDoor = true;
 
-$deliveryAddress = new Address();
+$deliveryAddress = new \Budbee\Model\Address();
 $deliveryAddress->street = 'Grevgatan 9';
 $deliveryAddress->postalCode = '11453';
 $deliveryAddress->city = 'Stockholm';
@@ -117,7 +122,6 @@ $deliveryAddress->country = 'SE';
 
 $deliveryContact->address = $deliveryAddress;
 
-// $order->collectionId = $collectionId;
 $order->delivery = $deliveryContact;
 
 $createdOrder = $orderAPI->createOrder($order);
