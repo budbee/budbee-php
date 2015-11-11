@@ -55,16 +55,6 @@ try {
 }
 ```
 
-## Select collection point (optional)
-
-Usually there will only be one default collection point and in that case, it will be automatically selected when an
-order is selected, but sometimes you have multiple collection points depending on delivery address and might want to
-choose where Budbee will pick up the order:
-
-```php
-$collectionId = $possibleCollectionPoints[0]->id;
-```
-
 ## Get upcoming delivery intervals
 
 ```php
@@ -76,6 +66,7 @@ try {
 
 $firstInterval = $intervalResponse[0];
 $interval = new \Budbee\Model\OrderInterval($firstInterval->collection, $firstInterval->delivery);
+$collectionPointId = $firstInterval->collectionPointId;
 
 echo 'Budbee can deliver between: ' + $interval->delivery->start + ' and ' + $interval->delivery->stop;
 
@@ -87,7 +78,7 @@ echo 'Budbee can deliver between: ' + $interval->delivery->start + ' and ' + $in
 // Create Order Object
 $order = new \Budbee\Model\OrderRequest();
 $order->interval = $interval;
-$order->collectionId = $firstInterval->collectionPointId;
+$order->collectionId = $collectionPointId;
 
 // Create Cart Object
 $cart = new \Budbee\Model\Cart();
