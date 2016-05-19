@@ -119,3 +119,23 @@ $createdOrder = $orderAPI->createOrder($order);
 
 echo 'Created Order';
 ```
+
+# Edit the delivery contact of an order
+
+```php
+$order = $orderAPI->createOrder($data);
+$deliveryContact = $order->delivery;
+$deliveryContact->name = 'Jane Doe';
+
+$updatedOrder = $orderAPI->editDeliveryContact($order->id, $deliveryContact);
+```
+
+# Edit the delivery address of an order
+
+```php
+$order = $orderAPI->createOrder($data);
+$deliveryAddress = $order->delivery->address;
+$deliveryAddress->street = 'Kungsholmsgatan 1';
+
+$updatedOrder = $orderAPI->editDeliveryAddress($order->id, $deliveryAddress);
+```

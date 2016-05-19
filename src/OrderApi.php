@@ -94,11 +94,20 @@ class OrderApi
 
     /**
      * Edit an order
-     * @param string $id ID of order to edit
-     * @param \Budbee\Model\Order $body
-     * @return \Budbee\Model\Order
+     * Deprecated
      */
     public function editOrder($id, $body)
+    {
+        throw new BudbeeException("`editOrder` has been deprecated. Please use `editDeliveryContact` and `editDeliveryAddress` to update an Order");
+    }
+
+    /**
+     * Edit an the delivery contact of an order
+     * @param string $id ID of order to edit
+     * @param \Budbee\Model\Contact $body
+     * @return \Budbee\Model\Order
+     */
+    public function editDeliveryContact($id, $body)
     {
         //parse inputs
         $resourcePath = "/multiple/orders/{id}";
@@ -109,9 +118,49 @@ class OrderApi
             'Content-Type' => 'application/vnd.budbee.multiple.orders-v1+json'
         );
 
-        if (null != $id) {
-            $resourcePath = str_replace("{id}", $this->apiClient->toPathValue($id), $resourcePath);
+        if (!isset($id)) {
+            throw new BudbeeException("Id cannot be null");
         }
+
+        $resourcePath = str_replace("{id}", $this->apiClient->toPathValue($id), $resourcePath);
+
+        //make the API Call
+        if (!isset($body)) {
+            $body = null;
+        }
+        $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
+
+        if (!$response) {
+            return null;
+        }
+
+        $responseObject = $this->apiClient->deserialize($response, '\Budbee\Model\Order');
+        return $responseObject;
+    }
+
+    /**
+     * Edit an the delivery address of an order
+     * @param string $id ID of order to edit
+     * @param \Budbee\Model\Address $body
+     * @return \Budbee\Model\Order
+     */
+    public function editDeliveryAddress($id, $body)
+    {
+        //parse inputs
+        $resourcePath = "/multiple/orders/{id}/address";
+        $method = Client::$PUT;
+        $queryParams = array();
+        $headerParams = array(
+            'Accept' => 'application/vnd.budbee.multiple.orders-v1+json',
+            'Content-Type' => 'application/vnd.budbee.multiple.orders-v1+json'
+        );
+
+        if (!isset($id)) {
+            throw new BudbeeException("Id cannot be null");
+        }
+
+        $resourcePath = str_replace("{id}", $this->apiClient->toPathValue($id), $resourcePath);
+
         //make the API Call
         if (!isset($body)) {
             $body = null;
