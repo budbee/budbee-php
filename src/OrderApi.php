@@ -236,14 +236,43 @@ class OrderApi
 
     /**
      * Get orders
+     * Returns a list of orders that matches the query paramters
+     *
+     * @param string keyword            Keyword to search for, will search for end customer name, delivery address and cartId
+     * @param int collectionPointId     Only return orders that has this Collection Point
+     * @param string before             Only return orders that has a delivery date before and including this date (YYYY-MM-DD)
+     * @param string after              Only return orders that has a delivery date after and including this date (YYYY-MM-DD)
+     * @param int start                 Offset to start at (for pagination)
+     * @param int num                   Maximum number of orders to return (for pagination)
+     *
      * @return array[\Budbee\Model\Order]
      */
-    public function getOrders()
+    public function getOrders($keyword = null, $collectionPointId = null, $before = null, $after = null, $start = null, $num = null)
     {
         //parse inputs
         $resourcePath = "/multiple/orders";
         $method = Client::$GET;
         $queryParams = array();
+
+        if (null != $keyword) {
+            $queryParams["keyword"] = $keyword;
+        }
+        if (null != $collectionPointId) {
+            $queryParams["collectionPointId"] = $collectionPointId;
+        }
+        if (null != $before) {
+            $queryParams["before"] = $before;
+        }
+        if (null != $after) {
+            $queryParams["after"] = $after;
+        }
+        if (null != $start) {
+            $queryParams["start"] = $start;
+        }
+        if (null != $num) {
+            $queryParams["num"] = $num;
+        }
+
         $headerParams = array(
             'Accept' => 'application/vnd.budbee.multiple.orders-v1+json',
             'Content-Type' => 'application/vnd.budbee.multiple.orders-v1+json'

@@ -140,16 +140,16 @@ class Client
             $postData = json_encode($postData);
         }
 
+        if (!empty($queryParams)) {
+            $url = $url . '?' . http_build_query($queryParams);
+        }
+
         # Add authorization header
         $timestamp = $this->getTimestamp();
         $nonce = $this->getNonce(20);
         $signature = $this->computeSignature($this->secretKey, $method, $timestamp, $nonce, $url, $postData);
 
         $headers = array_merge($headers, $this->getAuthHeaders($timestamp, $nonce, $this->apiKey, $signature));
-
-        if (!empty($queryParams)) {
-            $url = $url . '?' . http_build_query($queryParams);
-        }
 
         $curl = $this->configureCurl(curl_init(), $headers, $method, $postData, $url);
 
