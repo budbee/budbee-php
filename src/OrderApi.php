@@ -247,7 +247,7 @@ class OrderApi
      *
      * @return array[\Budbee\Model\Order]
      */
-    public function getOrders($keyword = null, $collectionPointId = null, $before = null, $after = null, $start = null, $num = null)
+    public function getOrders($keyword = null, $collectionPointId = null, $after = null, $before = null, $start = null, $num = null)
     {
         //parse inputs
         $resourcePath = "/multiple/orders";
@@ -260,11 +260,11 @@ class OrderApi
         if (null != $collectionPointId) {
             $queryParams["collectionPointId"] = $collectionPointId;
         }
-        if (null != $before) {
-            $queryParams["before"] = $before;
-        }
         if (null != $after) {
             $queryParams["after"] = $after;
+        }
+        if (null != $before) {
+            $queryParams["before"] = $before;
         }
         if (null != $start) {
             $queryParams["start"] = $start;
