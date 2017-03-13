@@ -24,7 +24,7 @@ use Budbee\Exception\BudbeeException;
 class Client
 {
     public static $PRODUCTION = 'https://api.budbee.com'; // Production url
-    public static $SANDBOX = 'http://sandbox.api.budbee.com'; // Sandbox url
+    public static $SANDBOX = 'https://sandbox.api.budbee.com'; // Sandbox url
     public static $DEVELOPMENT = 'http://localhost:9300'; // Internal development
 
     public static $POST = 'POST';
