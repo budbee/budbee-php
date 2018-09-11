@@ -49,7 +49,7 @@ Require the wrapper
 
 ```php
 try {
-    $possibleCollectionPoints = $postalCodesAPI->checkPostalCode('11453');
+    $possibleCollectionPoints = $postalCodesAPI->checkPostalCode('SE', '11453');
 } catch (\Budbee\Exception\BudbeeException $e) {
     die('Budbee does not deliver to specified Postal Code');
 }
@@ -59,7 +59,7 @@ try {
 
 ```php
 try {
-    $intervalResponse = $intervalAPI->getIntervals($deliveryAddress->postalCode, 2);
+    $intervalResponse = $intervalAPI->getIntervals($deliveryAddress->country, $deliveryAddress->postalCode, 2);
 } catch (\Budbee\Exception\BudbeeException $e) {
     die('No upcoming delivery intervals');
 }
