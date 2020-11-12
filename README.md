@@ -9,7 +9,7 @@ Add budbee-php to your `composer.json` file
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/budbee/budbee-php"
+            "url": "https://github.com/sterxa/budbee-php"
         }
     ],
     "require": {
