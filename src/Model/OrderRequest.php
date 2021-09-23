@@ -28,7 +28,9 @@ class OrderRequest implements JsonSerializable
         'cart' => '\Budbee\Model\Cart',
         'edi' => '\Budbee\Model\EDI',
         'collectionId' => 'int',
-        'delivery' => '\Budbee\Model\Contact'
+        'delivery' => '\Budbee\Model\Contact',
+        'productCodes' => 'array',
+        'boxDelivery' => '\Budbee\Model\BoxDelivery'
     );
 
     /**
@@ -61,14 +63,36 @@ class OrderRequest implements JsonSerializable
      */
     public $delivery;
 
+    /**
+     * Product codes.
+     * @var array
+     */
+    public $productCodes;
+
+    /**
+     * BoxDelivery selectedBox
+     * @var \Budbee\Model\BoxDelivery
+     */
+    public $boxDelivery;
+
     public function jsonSerialize()
     {
-    	return array(
+    	$orderRequest = array(
     		'interval' => $this->interval,
     		'cart' => $this->cart,
     		'edi' => $this->edi,
     		'collectionId' => $this->collectionId,
     		'delivery' => $this->delivery
     	);
+
+        if (isset($this->productCodes)) {
+            $order['productCodes'] = $this->productCodes;
+        }
+
+        if (isset($this->productCodes)) {
+            $order['boxDelivery'] = $this->boxDelivery;
+        }
+
+        return $orderRequest;
     }
 }
