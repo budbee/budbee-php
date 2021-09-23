@@ -86,11 +86,11 @@ class OrderRequest implements JsonSerializable
     	);
 
         if (isset($this->productCodes)) {
-            $order['productCodes'] = $this->productCodes;
+            $orderRequest['productCodes'] = $this->productCodes;
         }
 
         if (isset($this->productCodes)) {
-            $order['boxDelivery'] = $this->boxDelivery;
+            $orderRequest['boxDelivery'] = $this->boxDelivery;
         }
 
         return $orderRequest;
