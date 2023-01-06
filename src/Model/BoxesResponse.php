@@ -30,6 +30,7 @@ class BoxesResponse implements JsonSerializable
     'label' => 'string',
     'distance' => 'int',
     'address' => '\Budbee\Model\Address',
+    'estimatedDelivery' => 'string',
   );
 
   /**
@@ -68,6 +69,12 @@ class BoxesResponse implements JsonSerializable
    */
   public $address;
 
+  /**
+   * Delivery interval
+   * @var string
+   */
+  public $estimatedDelivery;
+
   public function jsonSerialize(): mixed
   {
     return array(
@@ -77,6 +84,7 @@ class BoxesResponse implements JsonSerializable
       'label' => $this->label,
       'distance' => $this->distance,
       'address' => $this->address,
+      'estimatedDelivery' => $this->estimatedDelivery,
     );
   }
 }
