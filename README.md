@@ -1,4 +1,10 @@
-# Budbee PHP Wrapper
+# [DEPRECATED] Budbee PHP Wrapper
+
+> **Warning**
+> This project is deprecated and should not be used for integrating with Budbee API.
+
+---
+
 This repository is a PHP wrapper of the budbee Open API. The API is used to create Order bookings at budbee.
 
 # Installation
