@@ -68,41 +68,6 @@ class PostalcodesApi
     }
 
     /**
-     * Check Postalcode
-     * @param string $postalcode Postalcode to validate
-     * @return array[\Budbee\Model\CollectionPoint] An array of collectionpoints in range of the postalcode
-     * @deprecated deprecated in favour of checkPostalCode($country, $postalcode)
-     */
-    public function checkPostalCode($postalcode)
-    {
-        //parse inputs
-        $resourcePath = "/postalcodes/validate/{postalcode}";
-        $method = Client::$GET;
-        $queryParams = array();
-        $headerParams = array(
-            'Accept' => 'application/vnd.budbee.postalcodes-v2+json',
-            'Content-Type' => 'application/vnd.budbee.postalcodes-v2+json'
-        );
-
-        if (null != $postalcode) {
-            $resourcePath = str_replace("{postalcode}", $this->apiClient->toPathValue($postalcode), $resourcePath);
-        }
-        //make the API Call
-        if (!isset($body)) {
-            $body = null;
-        }
-        $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
-
-        if (!$response) {
-            return false;
-        }
-
-        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\CollectionPoint]');
-
-        return $responseObject;
-    }
-
-    /**
      * Get Postalcodes
      * @param string country Country code to request
      * @return array[string]
@@ -121,36 +86,6 @@ class PostalcodesApi
         if (null != $country) {
             $resourcePath = str_replace("{country}", $this->apiClient->toPathValue($country), $resourcePath);
         }
-
-        //make the API Call
-        if (!isset($body)) {
-            $body = null;
-        }
-        $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
-
-        if (!$response) {
-            return null;
-        }
-
-        $responseObject = $this->apiClient->deserialize($response, 'array[string]');
-        return $responseObject;
-    }
-
-    /**
-     * Get Postalcodes
-     * @return array[string]
-     * @deprecated deprecated in favour of getPostalCodes($country)
-     */
-    public function getPostalCodes()
-    {
-        //parse inputs
-        $resourcePath = "/postalcodes";
-        $method = Client::$GET;
-        $queryParams = array();
-        $headerParams = array(
-            'Accept' => 'application/vnd.budbee.postalcodes-v1+json',
-            'Content-Type' => 'application/vnd.budbee.postalcodes-v1+json'
-        );
 
         //make the API Call
         if (!isset($body)) {
