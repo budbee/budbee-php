@@ -46,6 +46,7 @@ Require the wrapper
 
   $client = new \Budbee\Client($apiKey, $apiSecret, Budbee\Client::$SANDBOX);
   $postalCodesAPI = new \Budbee\PostalcodesApi($client);
+  $boxesAPI = new \Budbee\BoxesApi($client);
   $intervalAPI = new \Budbee\IntervalApi($client);
   $orderAPI = new \Budbee\OrderApi($client);
 ?>
@@ -58,6 +59,16 @@ try {
     $possibleCollectionPoints = $postalCodesAPI->checkPostalCode('SE', '11453');
 } catch (\Budbee\Exception\BudbeeException $e) {
     die('Budbee does not deliver to specified Postal Code');
+}
+```
+
+## Get available boxes (lockers)
+
+```php
+try {
+    $availableBoxes = $boxesAPI->getBoxes('SE', '11453');
+} catch (\Budbee\Exception\BudbeeException $e) {
+    die('No boxes were found for specified Postal Code');
 }
 ```
 
